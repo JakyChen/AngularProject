@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-root',
 
+  //Navigation bar
   //Changes routing to be dynamic
   template: `
   <ul>
