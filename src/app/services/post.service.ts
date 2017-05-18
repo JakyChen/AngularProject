@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
 
+//Make injectable so it can work as a dependency
 @Injectable()
 export class PostService {
     constructor(private http: Http){
