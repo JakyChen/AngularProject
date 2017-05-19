@@ -7,6 +7,7 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { UserComponent } from './components/user.component';
 import { AboutComponent } from './components/about.component';
+
 //Importing routing list
 import { routing } from './app.routing';
 
