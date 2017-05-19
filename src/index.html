@@ -7,12 +7,95 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ng2-bootstrap/x.x.x/ng2-bootstrap.min.js"></script>
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/ng2-bootstrap/x.x.x/ng2-bootstrap.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">-->
 </head>
 <body>
-  <!-- Set Base (default) for route -->
-  <base href="/">
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '296020340810556',
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v2.8'
+      });
+      FB.getLoginStatus(function(response) {
+        statusChangeCallback(response);
+      });
+    };
+
+    (function(d, s, id){
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    //Check if the current state is logged in or not
+    function statusChangeCallback(response){
+      if(response.status === 'connected'){
+        testAPI();
+        facebookToggle(true);
+      }else{
+        facebookToggle(false);
+      }
+    }
+    
+    function checkLoginState(){
+      FB.getLoginStatus(function(response) {
+        statusChangeCallback(response);
+      });
+    }
+
+    //Toggle between logout and facebook button
+    function facebookToggle(isLoggedIn){
+      if(isLoggedIn){
+        document.getElementById('profile').style.display = 'block';
+        document.getElementById('fb-btn').style.display = 'none';
+        document.getElementById('logout').style.display = 'block';
+      }else{
+        document.getElementById('profile').style.display = 'none';
+        document.getElementById('fb-btn').style.display = 'block';
+        document.getElementById('logout').style.display = 'none';
+      }
+    }
+    
+    //Logout function
+    function logout(){
+      FB.logout(function(response){
+        facebookToggle(false);
+      });
+    }
+
+    function testAPI(){
+      FB.api('/me?fields=name,email,birthday,location', function(response){
+        console.log(response);
+        let profileText;
+        if(response && !response.error){
+          profileText = `<h3>Welcome, ${response.name}</h3>
+            <ul>
+              <li>User ID: ${response.id}</li>
+              <li>User Email: ${response.email}</li>
+              <li>User Birthday: ${response.birthday}</li>
+              <li>User Location: ${response.location.name}</li>
+            </ul>`;
+        }
+        document.getElementById('profile').innerHTML = profileText;
+      });
+    }
+  </script>
+
+  <!-- FACEBOOK Button, Scope changes permissions requested -->
+  <fb:login-button
+      id="fb-btn"
+      scope="public_profile,email,user_birthday,user_location"
+      onlogin="checkLoginState();">
+  </fb:login-button>
+  
+  <a id="logout" href="#" onclick="logout()" style="display:none">Logout</a>
+  <div id="profile" style="display:none"></div>
+  
   <app-root>Loading...</app-root>
 </body>
 </html>
